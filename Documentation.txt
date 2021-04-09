@@ -1,0 +1,247 @@
+
+Two user and two issue entries are already stored inside the database for testing reasons
+
+UserOne : FirstPassword!
+UserTwo : SecondPassword@
+
+Passwords stored are hashed using bcrypt function
+
+
+The SignUp and SignIn requests return a JWT token that must be submitted inside a request HEADER for every successive request being made to the issue tracker API from now on in the format of
+Authorization : Bearer jwtTokenValue
+
+Not doing so, will result in a 401 or 403 response
+
+
+SIGNUP USER REQUEST
+POST http://localhost:8080/users/signup
+Headers:{
+	Content-Type : application/json
+}
+Payload: {"username":"UserThree", "password":"ThirdPassword#"}
+
+SIGN UP USER RESPONSE
+200 
+Payload:{
+    "jwtToken":"eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzM3OTIsImV4cCI6MTYxNzU3NTU5MiwidXNlcl9uYW1lIjoiVXNlclRocmVlIn0.hF4iVh7dacer-Rez1Dsl5nURW3CdsrSwb-mplPJ-WM8"
+}
+
+
+
+SIGNIN USER REQUEST
+POST http://localhost:8080/users/signin
+Headers:{
+	Content-Type : application/json
+}
+Payload: {"username":"UserThree", "password":"ThirdPassword#"}
+
+SIGN IN USER RESPONSE
+200 
+Payload:{
+    "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs"
+}
+
+
+GET USERS REQUEST
+GET http://localhost:8080/users
+Headers:{
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+
+GET USERS RESPONSE
+200
+Payload:{
+	[
+	    {
+	        "userId": 1,
+	        "username": "UserOne"
+	    },
+	    {
+	        "userId": 2,
+	        "username": "UserTwo"
+	    },
+	    {
+	        "userId": 3,
+	        "username": "UserThree"
+	    }
+	]
+}
+
+
+
+GET ISSUES REQUEST
+GET http://localhost:8080/issues
+Headers:{
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+
+GET ISSUES RESPONSE
+200
+Payload:{
+	[
+	    {
+	        "issueId": 1,
+	        "title": "Fix Me",
+	        "description": "Fix bug in sandbox",
+	        "dateCreated": "2021-04-04T22:01:55.395+00:00",
+	        "openingUser": {
+	            "userId": 1,
+	            "username": "UserOne"
+	        },
+	        "assignedUser": {
+	            "userId": 2,
+	            "username": "UserTwo"
+	        },
+	        "editorUser": {
+	            "userId": 1,
+	            "username": "UserOne"
+	        },
+	        "dateLastEdited": "2021-04-04T22:01:55.395+00:00"
+	    },
+	    {
+	        "issueId": 2,
+	        "title": "Fix Me Too",
+	        "description": "Fix bug in production",
+	        "dateCreated": "2021-04-04T22:01:55.405+00:00",
+	        "openingUser": {
+	            "userId": 2,
+	            "username": "UserTwo"
+	        },
+	        "assignedUser": {
+	            "userId": 1,
+	            "username": "UserOne"
+	        },
+	        "editorUser": {
+	            "userId": 2,
+	            "username": "UserTwo"
+	        },
+	        "dateLastEdited": "2021-04-04T22:01:55.405+00:00"
+	    }
+	]
+}
+
+
+
+
+GET SPECIFIC ISSUE REQUEST
+GET http://localhost:8080/issues/2
+Headers:{
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+
+GET SPECIFIC ISSUE RESPONSE
+200
+Payload:{
+    "issueId": 2,
+    "title": "Fix Me Too",
+    "description": "Fix bug in production",
+    "dateCreated": "2021-04-04T22:01:55.405+00:00",
+    "openingUser": {
+        "userId": 2,
+        "username": "UserTwo"
+    },
+    "assignedUser": {
+        "userId": 1,
+        "username": "UserOne"
+    },
+    "editorUser": {
+        "userId": 2,
+        "username": "UserTwo"
+    },
+    "dateLastEdited": "2021-04-04T22:01:55.405+00:00"
+}
+
+
+
+UPDATE ISSUE REQUEST
+PUT http://localhost:8080/issues
+Headers:{
+	Content-Type : application/json
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+Payload:{
+	"issueId":2,
+	"title":"Fix me Too Revised",
+	"description":"Bug in production still there, we better fix this soon. Any updates?",
+	"assigneeUsername":"UserThree"
+}
+
+*Apart from issueId, all other fields are not mandatory. If they are not present in the request, the corresponding issue field will not be updated.
+** If assigneeUserName does not exist in database, a 404 will be returned
+
+UPDATE ISSUE RESPONSE
+200
+Payload:{
+    "issueId": 2,
+    "title": "Fix me Too Revised",
+    "description": "Bug in production still there, we better fix this soon. Any updates?",
+    "dateCreated": "2021-04-04T22:01:55.405+00:00",
+    "openingUser": {
+        "userId": 2,
+        "username": "UserTwo"
+    },
+    "assignedUser": {
+        "userId": 3,
+        "username": "UserThree"
+    },
+    "editorUser": {
+        "userId": 1,
+        "username": "UserOne"
+    },
+    "dateLastEdited": "2021-04-04T22:39:52.571+00:00"
+}
+
+
+
+RAISE NEW ISSUE REQUEST
+POST http://localhost:8080/issues
+Headers:{
+	Content-Type : application/json
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+Payload:{
+	"title":"Fix me Three",
+	"description":"Fix another bug in production",
+	"assigneeUsername":"UserTwo"
+}
+
+RAISE NEW ISSUE RESPONSE
+200
+Payload:{
+    "issueId": 3,
+    "title": "Fix me Three",
+    "description": "Fix another bug in production",
+    "dateCreated": "2021-04-04T22:45:20.539+00:00",
+    "openingUser": {
+        "userId": 1,
+        "username": "UserOne"
+    },
+    "assignedUser": {
+        "userId": 2,
+        "username": "UserTwo"
+    },
+    "editorUser": {
+        "userId": 1,
+        "username": "UserOne"
+    },
+    "dateLastEdited": "2021-04-04T22:45:20.539+00:00"
+}
+
+
+
+DELETE ISSUE REQUEST
+DELETE http://localhost:8080/issues
+Headers:{
+	Content-Type : application/json
+	Authorization : Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTc1NzQ5MzAsImV4cCI6MTYxNzU3NjczMCwidXNlcl9uYW1lIjoiVXNlck9uZSJ9.kLA-GcMQANIc3_2fTwM-JEI8GIL8cJ30EcGftsoIwZs
+}
+Payload:{
+	"issueId":1
+}
+
+DELETE ISSUE RESPONSE
+200
+
+
+
+
