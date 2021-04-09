@@ -2,7 +2,7 @@
 
 Hello all
 
-This is a small demo of an issue-tracker REST APO with the following functionality
+This is a small demo of an issue-tracker REST API with the following functionality
 
 • Signup new user
 • Sign in user
@@ -27,3 +27,4 @@ Technologies used
 • Tomcat Application server v9 (built in SpringBoot)
 • In memory relational Database H2 embedded
 
+Instructions are included in Documentation.txt file
