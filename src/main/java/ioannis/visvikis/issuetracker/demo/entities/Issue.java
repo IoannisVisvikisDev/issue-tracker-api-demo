@@ -150,16 +150,4 @@ public class Issue {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "Issue{" +
-                "issueId=" + issueId +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", dateCreated=" + dateCreated +
-                ", openingUser=" + openingUser +
-                ", assignedUser=" + assignedUser +
-                ", dateLastEdited=" + dateLastEdited +
-                '}';
-    }
 }

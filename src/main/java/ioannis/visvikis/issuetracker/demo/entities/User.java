@@ -1,7 +1,9 @@
 package ioannis.visvikis.issuetracker.demo.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "userId")
 @Table(name="user")
 public class User {
 
@@ -25,11 +28,9 @@ public class User {
     @JsonIgnore //do not show in response
     private String password;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "assignedUser")  //A User can have multiple Issues assigned to
     private List<Issue> assignedIssuesList = new LinkedList<>();  //we're expecting more addittions-deletions than searches-iterations
 
-    @JsonIgnore
     @OneToMany(mappedBy = "openingUser")   //A User can have multiple Issues assigned to
     private List<Issue> createdIssuesList = new LinkedList<>();  //we're expecting more addittions-deletions than searches-iterations
 
@@ -103,18 +104,6 @@ public class User {
         int result = userId.hashCode();
         result = 31 * result + username.hashCode();
         return result;
-    }
-
-
-    @Override
-    public String toString() {
-        return "RegisteredUser{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", assignedIssuesList=" + assignedIssuesList +
-                ", createdIssuesList=" + createdIssuesList +
-                '}';
     }
 
 }

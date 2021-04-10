@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -32,9 +31,15 @@ public class UsersController {
 
 
     @GetMapping
-    public List<User> getAllUsers(HttpServletRequest request){
+    public List<User> getAllUsers(){
 
         return fetchService.getAllUsers();
+    }
+
+
+    @GetMapping("/{username}")
+    public User getUserByUsername(@PathVariable String username){
+        return fetchService.getUserByUsername(username);
     }
 
 
